@@ -1,4 +1,4 @@
-# Gray Code Converter
+# Arithmetic Logic Unit
 ## Operation Principle
 - Arithmetic Logic Unit Function
 	- N = 32

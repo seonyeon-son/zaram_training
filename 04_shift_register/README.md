@@ -1,4 +1,4 @@
-# Gray Code Converter
+# 8-bit Shift Register
 ## Operation Principle
 - 8bit Shift Register
 ![image](https://github.com/seonyeon-son/zaram_training/assets/173435182/4421bd5f-f5ff-4313-82c7-f49e26762457)

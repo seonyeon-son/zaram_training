@@ -1,6 +1,5 @@
-# Gray Code Converter
+# SRAM Extension
 ## Operation Principle
-- SRAM Extension
 - SRAM Unit
 	- 4bit Adder & 32bit I/O Data -> 6bit Adder & 64bit I/O Data
 

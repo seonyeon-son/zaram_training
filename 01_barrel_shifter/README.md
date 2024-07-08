@@ -1,6 +1,5 @@
-# Gray Code Converter
+# 8-bit Barrel Shifter
 ## Operation Principle
-- 8bit Barrel Shifter
 - Right rotate
 - k: rotate amount
   - k[2] : 4bit rotate
