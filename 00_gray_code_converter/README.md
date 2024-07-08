@@ -31,7 +31,7 @@ endmodule
 ```
 ## Verilog Code
 ### DUT - Gray to Bin
-```
+```Verilog
 module gray_to_bin
 #(
 	parameter	N = 8
@@ -53,7 +53,7 @@ module gray_to_bin
 endmodule
 ```
 ### Testbench
-```
+```Verilog
 `define CLKFREQ		100
 `define SIMCYCLE	20
 

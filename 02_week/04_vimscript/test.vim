@@ -1,6 +1,0 @@
-
-
-
-
-echo 	"hello" . 'test'
-
