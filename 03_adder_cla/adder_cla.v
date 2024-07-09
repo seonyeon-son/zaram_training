@@ -8,14 +8,14 @@ module adder_cla (
 
 	wire [7:0]		carry;
 
-	CLA_4bit u_CLA_4bit_0(.a(A_i[3:0]), .b(B_i[3:0]), .C_in(S_o[3:0]),	.s(S_o[3:0]), .Cout(carry[0]));
-	CLA_4bit u_CLA_4bit_1(.a(A_i[7:4]), .b(B_i[7:4]), .C_in(S_o[7:4]), .s(S_o[3:0]), .Cout(carry[1]));
-	CLA_4bit u_CLA_4bit_2(.a(A_i[11:8]), .b(B_i[11:8]), .C_in(S_o[11:8]), .s(S_o[3:0]), .Cout(carry[2]));
-	CLA_4bit u_CLA_4bit_3(.a(A_i[15:12]), .b(B_i[15:12]), .C_in(S_o[15:12]), .s(S_o[3:0]), .Cout(carry[3]));
-	CLA_4bit u_CLA_4bit_4(.a(A_i[19:16]), .b(B_i[19:16]), .C_in(S_o[19:16]), .s(S_o[3:0]), .Cout(carry[4]));
-	CLA_4bit u_CLA_4bit_5(.a(A_i[23:20]), .b(B_i[23:20]), .C_in(S_o[23:20]), .s(S_o[3:0]), .Cout(carry[5]));
-	CLA_4bit u_CLA_4bit_6(.a(A_i[27:24]), .b(B_i[27:24]), .C_in(S_o[27:24]), .s(S_o[3:0]), .Cout(carry[6]));
-	CLA_4bit u_CLA_4bit_7(.a(A_i[31:28]), .b(B_i[31:28]), .C_in(S_o[31:28]), .s(S_o[3:0]), .Cout(Cout_o));
+	CLA_4bit u_CLA_4bit_0(.a(A_i[3:0]), .b(B_i[3:0]), .C_in(Cin),	.s(S_o[3:0]), .Cout(carry[0]));
+	CLA_4bit u_CLA_4bit_1(.a(A_i[7:4]), .b(B_i[7:4]), .C_in(carry[0]), .s(S_o[7:4]), .Cout(carry[1]));
+	CLA_4bit u_CLA_4bit_2(.a(A_i[11:8]), .b(B_i[11:8]), .C_in(carry[1]), .s(S_o[11:8]), .Cout(carry[2]));
+	CLA_4bit u_CLA_4bit_3(.a(A_i[15:12]), .b(B_i[15:12]), .C_in(carry[2]), .s(S_o[15:12]), .Cout(carry[3]));
+	CLA_4bit u_CLA_4bit_4(.a(A_i[19:16]), .b(B_i[19:16]), .C_in(carry[3]), .s(S_o[19:16]), .Cout(carry[4]));
+	CLA_4bit u_CLA_4bit_5(.a(A_i[23:20]), .b(B_i[23:20]), .C_in(carry[4]), .s(S_o[23:20]), .Cout(carry[5]));
+	CLA_4bit u_CLA_4bit_6(.a(A_i[27:24]), .b(B_i[27:24]), .C_in(carry[5]), .s(S_o[27:24]), .Cout(carry[6]));
+	CLA_4bit u_CLA_4bit_7(.a(A_i[31:28]), .b(B_i[31:28]), .C_in(carry[6]), .s(S_o[31:28]), .Cout(Cout_o));
 
 	endmodule
 
@@ -81,7 +81,7 @@ module	CLA(
 	assign C[2] = G[2] | (P[2] & C[1]);
 	assign C[3] = G[3] | (P[3] & C[2]);
 
-	assign Cout = PG | (PG & Cin);
+	assign Cout = GG | (PG & Cin);
 
 endmodule
 

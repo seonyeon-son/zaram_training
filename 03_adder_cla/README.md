@@ -212,3 +212,4 @@ module adder_cla_tb;
 ```
 ## Simulation Result
 
+![Waveform0](./vcd/waveform.png);
