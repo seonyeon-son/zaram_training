@@ -1,105 +1,121 @@
+`define	SIMCYCLE	15
+`define	CLKFREQ		100
 `include "traffic_light.v"
 
-`define CLKFREQ 50
-`define SIMCYCLE 10
+module fsm_tb;
 
-module traffic_light_tb;
+	wire	[8*8-1 : 0]		l_a;
+	wire	[8*8-1 : 0]		l_b;
+	reg						p;
+	reg						r;
+	reg						t_a;
+	reg						t_b;
+	reg						clk;
+	reg						rstn;
 
-	reg c_p;
-	reg c_r;
-	reg c_TA;
-	reg c_TB;
-	reg c_clk;
-	reg c_rstn;
-	wire [1:0] c_LA;
-	wire [1:0] c_LB;
+//-------------------------------
+//CLK Generate
+//-------------------------------
+always #(500/`CLKFREQ) clk = ~clk;
 
-	traffic_light
-	u_traffic_light(
-		.c_p				(c_p				),
-		.c_r				(c_r				),
-		.c_TA				(c_TA				),
-		.c_TB				(c_TB				),
-		.c_clk				(c_clk				),
-		.c_rstn				(c_rstn				),
-		.c_LA				(c_LA				),
-		.c_LB				(c_LB				)
-	);
+//-------------------------------
+//Module Instance
+//-------------------------------
 
-
-//-----------------------------------------
-// Clock
-//-----------------------------------------
-	always #(500/`CLKFREQ) c_clk = ~c_clk;
-//-----------------------------------------
-// Tasks
-//-----------------------------------------
-	task init;
-		begin 
-			c_p = 0;
-			c_r = 0;
-            c_TA = 0;
-            c_TB = 0;
-            c_clk = 0;
-            c_rstn = 0;
-		end 
-	endtask
-//-----------------------------------------
-// Test Stimulus 
-//-----------------------------------------
-
-	integer i;
-	initial begin 
-		init();
-				@(posedge c_clk);
-				#10;
-				c_rstn = 1;
-
-				c_p = 1'b1;
-				c_TA = 1'b1;
-				c_r = 1'b0;
-				c_TB = 1'b0;
-				
-				@(posedge c_clk); 
-				#10;
-					
-				c_p = 1'b0;
-				c_TA = 1'b0;
-				c_r = 1'b1;
-				c_TB = 1'b1;
+traffic_light u_traffic_light
+(
+	.l_a 		(	l_a 		),
+	.l_b 		(	l_b 		),
+	.p   		(	p   		),
+	.r   		(	r   		),
+	.t_a 		(	t_a 		),
+	.t_b 		(	t_b 		),
+	.clk 		(	clk 		),
+	.rstn     	(	rstn	 	)
+);
+//-------------------------------
+//Tasks
+//-------------------------------
+task init;
+	begin
+		p	= 0;
+		r	= 0;
+		t_a	= 0;
+		t_b	= 0;
+        clk 		= 0;
+        rstn		= 1;
 			
-				@(posedge c_clk); 
-				#10;
-				
-				c_p = 1'b1;
-				c_TA = 1'b1;
-				c_r = 1'b0;
-				c_TB = 1'b0;
-				
-				@(posedge c_clk); 
-				#10;
-			
-				c_p = 1'b0;
-				c_TA = 1'b0;
-				c_r = 1'b1;
-				c_TB = 1'b1;
-			
-				@(posedge c_clk); 
-				#10;
-			$finish;
-		end 
+		@(posedge clk);
+		rstn	= 0;
+
+		repeat(20) begin
+			@(posedge clk);
+		end
 		
-// ---------------------------------------------------
-// Dump VCD
-// ---------------------------------------------------
+        rstn	= 1;
 
-	reg [8*32-1:0] vcd_file;
+	end
+endtask
+//-------------------------------
+//Test Start
+//-------------------------------
+integer i;
 	initial begin
-		if($value$plusargs("vcd_file=%s", vcd_file)) begin
+		init();
+			repeat(100)
+			@(posedge clk);
+			p = 1;
+			repeat(200)
+			@(posedge clk);
+			r = 1;
+			repeat(100)
+			@(posedge clk);
+			t_a = 1;
+			repeat(100)
+			@(posedge clk);
+			t_a = 0;
+			t_b = 1;
+			repeat(100)
+			@(posedge clk);
+			t_b = 0;
+			repeat(100)
+			@(posedge clk);
+			for(i=0;i<`SIMCYCLE;i++) begin
+				p		=	$urandom;
+				r		=	$urandom;
+				#(10000/`CLKFREQ);
+			end			
+				p		=	0;
+				r		=	0;
+			for(i=0;i<`SIMCYCLE;i++) begin
+				t_a		=	$urandom;
+				t_b		=	$urandom;
+				#(10000/`CLKFREQ);
+			end			
+				t_a		=	0;
+				t_b		=	0;
+			for(i=0;i<`SIMCYCLE;i++) begin
+				p		=	$urandom;
+				r		=	$urandom;
+				t_a		=	$urandom;
+				t_b		=	$urandom;
+				#(10000/`CLKFREQ);
+			end			
+			repeat(10)
+			@(posedge clk);
+			$finish;
+		end
+
+//-------------------------------
+//Dump VCD
+//-------------------------------
+reg [8*32-1:0]	vcd_file;
+	initial begin
+		if ($value$plusargs("vcd_file=%s", vcd_file)) begin
 			$dumpfile(vcd_file);
 			$dumpvars;
-		end else begin 
-			$dumpfile("traffic_light_tb.vcd");
+		end else begin
+			$dumpfile("fsm_tb.vcd");
 			$dumpvars;
 		end
 	end
